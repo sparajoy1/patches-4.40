@@ -524,7 +524,7 @@ Customize ComfortLight settings:
   # In an unnamed subroutine two layers into FrontLightPopupController::loadView
   # (find it by going back from QTime::addSecs), the times for the dropdown are
   # generated into a QVector<QPair<QString, QTime>> with a simple loop.
-  - BaseAddress: 0xea841c # find the base of the unnamed subroutine with the x-ref to _ZN5QTimeC1Eiiii
+  - BaseAddress: 0xE9841c # find the base of the unnamed subroutine with the x-ref to _ZN5QTimeC1Eiiii
   #
   # Change the initial hour / first bedtime dropdown item passed to the QTime
   # constructor (mov r1, #21):
