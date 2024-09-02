@@ -24,7 +24,7 @@ func main() {
 	basedir := flag.String("basedir", ".", "base dir for files")
 	srcdir := flag.String("srcdir", "src", "directory under basedir for sources")
 	testdir := flag.String("testdir", "testdata", "directory under basedir for testdata")
-	kpbin := flag.String("kpbin", "kobopatch", "kobopatch binary path")
+	kpbin := flag.String("kpbin", "./dl/v0.15.0/kobopatch-linux-64bit", "kobopatch binary path")
 	flag.Parse()
 
 	var err error
