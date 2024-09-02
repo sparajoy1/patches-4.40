@@ -391,7 +391,23 @@ Larger Sleep/Power-off timeouts:
   - ReplaceInt: {Offset: 300, Find: 45, Replace:  83}
   - ReplaceInt: {Offset: 360, Find: 60, Replace: 165}
 
-# TODO(geek1011): Allow rotation on all devices
+Allow rotation on all devices:
+  - Enabled: no
+  - Description: |
+      Enables rotation on all devices. This shows a rotation icon in the status
+      bar, which shows a menu allowing you to choose between portrait and landscape
+      when pressed. This icon is only shown on rotatable views (like the reader).
+      Unlike only the DeveloperSettings ForceAllowLandscape option, this patch
+      also makes the rotation icon show on the new reader as well.
+  # Always return true for ForceAllowLandscape:
+  - ReplaceBytes: {Base: "DevSettings::forceAllowLandscape()", Offset: 54, FindInstBLX: {SymPLT: "QVariant::toBool() const"}, ReplaceH: 4F F0 01 00}
+  # In ReadingMenuView::ReadingMenuView, replace the value of Device::hasOrientationSensor,
+  # which is passed to a function to hide/show the rotate icon:
+  - ReplaceBytes: {Base: "ReadingMenuView::updateReadingMenu()", Offset: 238, FindInstBLX: {SymPLT: "Device::hasOrientationSensor() const"}, ReplaceH: 4F F0 01 00}
+  # Also fix sizing of popup by doing the same in RotatePopup::RotatePopup, but
+  # note that this will make the Automatic option show too (and do nothing):
+  - ReplaceBytes: {Base: "RotatePopup::RotatePopup(QWidget*)", Offset: 190, FindInstBLX: {SymPLT: "Device::hasOrientationSensor() const"}, ReplaceH: 4F F0 01 00}
+
 
 Don't uppercase header/footer text:
   - Enabled: no
@@ -508,7 +524,7 @@ Customize ComfortLight settings:
   # In an unnamed subroutine two layers into FrontLightPopupController::loadView
   # (find it by going back from QTime::addSecs), the times for the dropdown are
   # generated into a QVector<QPair<QString, QTime>> with a simple loop.
-  - BaseAddress: 0xE8629C # find the base of the unnamed subroutine with the x-ref to _ZN5QTimeC1Eiiii
+  - BaseAddress: 0xea841c # find the base of the unnamed subroutine with the x-ref to _ZN5QTimeC1Eiiii
   #
   # Change the initial hour / first bedtime dropdown item passed to the QTime
   # constructor (mov r1, #21):
